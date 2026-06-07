@@ -18,7 +18,16 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === "fetchIP") {
     fetchIPInfo()
       .then((info) => sendResponse({ success: true, info }))
-      .catch(() => sendResponse({ success: false }));
+      .catch((error) => {
+        chrome.storage.local.get("ipInfo", (result) => {
+          if (result.ipInfo) {
+            sendResponse({ success: true, info: result.ipInfo, cached: true });
+          } else {
+            sendResponse({ success: false, error: error.message || "IP lookup failed" });
+          }
+        });
+      });
+
     return true;
   }
 
@@ -30,7 +39,7 @@ function scheduleRefresh() {
 }
 
 async function fetchIPInfo() {
-  const response = await fetch("https://ipwho.is/?fields=success,message,ip,country,country_code,region,city");
+  const response = await fetch("http://ip-api.com/json/?fields=status,message,query,country,countryCode,regionName,city");
 
   if (!response.ok) {
     throw new Error("IP lookup request failed");
@@ -38,16 +47,16 @@ async function fetchIPInfo() {
 
   const data = await response.json();
 
-  if (data.success === false) {
+  if (data.status === "fail") {
     throw new Error(data.message || "IP lookup failed");
   }
 
   const info = {
-    ip: data.ip,
-    country: data.country,
-    countryCode: data.country_code,
-    region: data.region,
-    city: data.city,
+    ip: data.query || "",
+    country: data.country || "",
+    countryCode: data.countryCode || "",
+    region: data.regionName || "",
+    city: data.city || "",
     lastUpdated: new Date().toISOString()
   };
 
