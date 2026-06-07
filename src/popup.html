@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>IP Region Flag</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <h2>🌐 IP Region</h2>
+    <div id="loading">Loading...</div>
+    <div id="info" class="hidden">
+      <div class="flag-container">
+        <img id="flag" alt="Country flag">
+      </div>
+      <table>
+        <tr>
+          <td class="label">IP:</td>
+          <td id="ip"></td>
+        </tr>
+        <tr>
+          <td class="label">Country:</td>
+          <td id="country"></td>
+        </tr>
+        <tr>
+          <td class="label">Region:</td>
+          <td id="region"></td>
+        </tr>
+        <tr>
+          <td class="label">City:</td>
+          <td id="city"></td>
+        </tr>
+      </table>
+      <p class="updated">Last updated: <span id="lastUpdated"></span></p>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
