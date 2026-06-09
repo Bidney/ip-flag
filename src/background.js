@@ -67,6 +67,11 @@ function scheduleRefresh() {
   });
 }
 
+function normalizeCountryCode(value) {
+  const countryCode = String(value || "").trim().toLowerCase();
+  return /^[a-z]{2}$/.test(countryCode) ? countryCode : "";
+}
+
 async function refreshIPInfo({ useCacheOnError = false } = {}) {
   try {
     return await getCurrentIPInfo();
@@ -91,7 +96,7 @@ async function getCurrentIPInfo() {
     const currentIP = await fetchCurrentIP();
 
     if (currentIP && currentIP === cachedInfo.ip) {
-      await updateActionFromInfo(cachedInfo);
+      await updateActionTitleFromInfo(cachedInfo);
       return { info: cachedInfo, cached: true };
     }
   }
@@ -136,7 +141,7 @@ async function fetchFullIPInfo() {
   return {
     ip: data.query || "",
     country: data.country || "",
-    countryCode: data.countryCode || "",
+    countryCode: normalizeCountryCode(data.countryCode).toUpperCase(),
     region: data.regionName || "",
     city: data.city || "",
     lastUpdated: new Date().toISOString()
@@ -156,8 +161,7 @@ async function restoreActionFromCache() {
   }
 }
 
-async function updateActionFromInfo(info) {
-  const countryCode = String(info.countryCode || "").trim().toLowerCase();
+async function updateActionTitleFromInfo(info) {
   const titleParts = [
     info.ip,
     info.country,
@@ -168,6 +172,12 @@ async function updateActionFromInfo(info) {
   await chrome.action.setTitle({
     title: titleParts.length ? `IP Region Flag: ${titleParts.join(" - ")}` : "IP Region Flag"
   });
+}
+
+async function updateActionFromInfo(info) {
+const countryCode = normalizeCountryCode(info.countryCode);
+
+  await updateActionTitleFromInfo(info);
 
   if (countryCode) {
     await setFlagIcon(countryCode);
