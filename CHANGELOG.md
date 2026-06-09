@@ -7,6 +7,7 @@
 - Restores the toolbar icon from cached data when Chrome starts or the extension service worker wakes up.
 - Keeps the periodic refresh behavior while avoiding unnecessary full region lookups.
 - Limits extension storage access to trusted extension contexts when the Chrome API is available.
+- Avoids reloading the toolbar flag image when the public IP has not changed.
 
 ## 0.0.4
 
