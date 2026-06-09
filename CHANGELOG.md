@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.0.5
+
+- Adds a lightweight IP-only check before requesting full region details.
+- Reuses the cached country, region, city, and flag when the public IP has not changed.
+- Restores the toolbar icon from cached data when Chrome starts or the extension service worker wakes up.
+- Keeps the periodic refresh behavior while avoiding unnecessary full region lookups.
+- Limits extension storage access to trusted extension contexts when the Chrome API is available.
+
 ## 0.0.4
 
 - Uses the working ip-api.com lookup flow.

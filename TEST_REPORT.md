@@ -1,4 +1,4 @@
-IP Region Flag 0.0.4 test report
+IP Region Flag 0.0.5 test report
 
 required file manifest.json: PASS
 required file background.js: PASS
@@ -10,7 +10,7 @@ required file icons/icon32.png: PASS
 required file icons/icon48.png: PASS
 required file icons/icon128.png: PASS
 manifest parses: PASS
-manifest version is 0.0.4: PASS
+manifest version is 0.0.5: PASS
 manifest version is 3: PASS
 uses ip-api host permission: PASS
 uses flagcdn host permission: PASS
@@ -26,4 +26,5 @@ ZIP contains icon128.png: PASS
 
 icon128 non-transparent artwork bbox: (16, 16, 112, 112)
 Live network lookup was not tested in this sandbox.
-The uploaded background script uses http://ip-api.com and https://flagcdn.com.
+The updated background script uses http://ip-api.com for a lightweight IP-only check and only requests full region details when the cached IP is missing or changed.
+The updated background script uses https://flagcdn.com for toolbar and popup flag images.

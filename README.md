@@ -10,52 +10,53 @@ The extension is useful when you want to quickly check which country and region 
 - Shows approximate country, region, and city
 - Displays the matching country flag in the popup
 - Updates the toolbar icon to match the detected country
-- Refreshes the stored IP details every few minutes
+- Checks the current public IP every few minutes
+- Reuses cached region details when the public IP has not changed
 - Stores only the latest lookup result in local Chrome storage
 
 ## How it works
 
-The extension requests public IP location details from ip-api.com and country flag images from flagcdn.com.
+The extension requests public IP details from ip-api.com and country flag images from flagcdn.com.
 
-The latest lookup result is stored locally in Chrome storage so the popup can load quickly. The extension does not read website content, browsing history, passwords, form data, messages, or files.
+After a successful full lookup, the latest result is stored locally in Chrome storage so the popup can load quickly and the toolbar icon can show the last detected country.
+
+On later refreshes, the extension first performs a lightweight IP-only check. If the public IP is the same as the cached IP, the extension reuses the cached country, region, city, and flag instead of requesting the full region details again. If the public IP has changed, the extension requests fresh region details and updates the cache.
+
+The extension does not read website content, browsing history, passwords, form data, messages, or files.
 
 ## Install locally
 
 1. Download or clone this repository.
 2. Open Chrome.
-3. Go to `chrome://extensions`.
+3. Go to chrome://extensions.
 4. Turn on Developer mode.
 5. Click Load unpacked.
-6. Select the `src` folder.
+6. Select the src folder.
 
 ## Chrome Web Store package
 
-The store upload package should contain the contents of the `src` folder at the ZIP root.
+The store upload package should contain the contents of the src folder at the ZIP root.
 
 To build the package:
 
-```bash
 python scripts/validate_package.py
-```
 
 The script creates:
 
-```text
-dist/ip_region_flag_0_0_4_chrome_web_store.zip
-```
+dist/ip_region_flag_0_0_5_chrome_web_store.zip
 
 ## Permissions
 
 The extension requests:
 
-- `alarms`: refreshes IP location details periodically.
-- `storage`: stores the latest lookup result locally.
-- `http://ip-api.com/*`: requests public IP location details.
-- `https://flagcdn.com/*`: loads country flag images.
+- alarms: checks the current public IP periodically.
+- storage: stores the latest IP lookup result locally.
+- http://ip-api.com/*: requests the current public IP and, when needed, IP location details.
+- https://flagcdn.com/*: loads country flag images.
 
 ## Version
 
-Current version: 0.0.4
+Current version: 0.0.5
 
 ## License
 

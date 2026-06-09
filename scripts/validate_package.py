@@ -3,9 +3,14 @@ from PIL import Image
 import json
 import subprocess
 import zipfile
-import sys
 
-ROOT = Path(__file__).resolve().parents[1]
+SCRIPT_PATH = Path(__file__).resolve()
+
+if (SCRIPT_PATH.parent / "src").exists():
+    ROOT = SCRIPT_PATH.parent
+else:
+    ROOT = SCRIPT_PATH.parents[1]
+
 SRC = ROOT / "src"
 DIST = ROOT / "dist"
 DIST.mkdir(exist_ok=True)
@@ -32,8 +37,8 @@ manifest = json.loads((SRC / "manifest.json").read_text(encoding="utf-8"))
 if manifest.get("manifest_version") != 3:
     raise SystemExit("manifest_version must be 3")
 
-if manifest.get("version") != "0.0.4":
-    raise SystemExit("manifest version must be 0.0.4")
+if manifest.get("version") != "0.0.5":
+    raise SystemExit("manifest version must be 0.0.5")
 
 if "http://ip-api.com/*" not in manifest.get("host_permissions", []):
     raise SystemExit("Missing ip-api host permission")
@@ -64,7 +69,7 @@ for js_file in ["background.js", "popup.js"]:
     if result.returncode != 0:
         raise SystemExit(result.stderr)
 
-package = DIST / "ip_region_flag_0_0_4_chrome_web_store.zip"
+package = DIST / "ip_region_flag_0_0_5_chrome_web_store.zip"
 
 if package.exists():
     package.unlink()
